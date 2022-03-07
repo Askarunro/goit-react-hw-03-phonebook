@@ -13,9 +13,11 @@ class App extends Component {
   };
 
   componentDidMount() {
-    const contacts = localStorage.getItem('contacts');
-    const parsedContacts = JSON.parse(contacts);
-    this.setState({contacts: parsedContacts})
+    if(localStorage.getItem('contacts') !== null ){
+      const contacts = localStorage.getItem('contacts');
+      const parsedContacts = JSON.parse(contacts);
+      this.setState({contacts: parsedContacts})
+    }
   }
 
   componentDidUpdate(prevState) {
@@ -25,6 +27,7 @@ class App extends Component {
   }
 
   formSubmitHandler = (data) => {
+
     let exist = false;
     this.state.contacts.forEach((contact) => {
       if (contact.name.toLowerCase() === data.name.toLowerCase()) {
@@ -33,8 +36,8 @@ class App extends Component {
     });
     if (!exist) {
       this.setState({
-        contacts: [...this.state.contacts, data],
-      });
+        contacts: [ ...this.state.contacts, data]}
+      )
     } else alert(`${data.name} is already i contacts`);
   };
 
@@ -42,13 +45,12 @@ class App extends Component {
     this.setState({ filter: e.currentTarget.value });
   };
 
-  deleteContact = (contactId) => {
-    this.setState((prevState) => ({
-      contacts: prevState.contacts.filter(
-        (contact) => contact.name !== contactId
-      ),
-    }));
-  };
+deleteContact = (contactId)=>{
+  this.setState(prevState =>({
+    contacts: prevState.contacts.filter(contact => contact.name !== contactId)
+  }))
+}
+
 
   render() {
     return (
